@@ -1,0 +1,114 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+    %meta{:content => "ie=edge", "http-equiv" => "x-ua-compatible"}/
+    %title CaddyUI
+    / Font Awesome Icons
+    %link{:href => "plugins/fontawesome-free/css/all.min.css", :rel => "stylesheet"}/
+    / Theme style
+    %link{:href => "dist/css/adminlte.min.css", :rel => "stylesheet"}/
+    / Google Font: Source Sans Pro
+    %link{:href => "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700", :rel => "stylesheet"}/
+  %body.hold-transition.sidebar-mini
+    .wrapper
+      / Navbar
+      %nav.main-header.navbar.navbar-expand.navbar-white.navbar-light
+        / Left navbar links
+        %ul.navbar-nav
+          %li.nav-item
+            %a.nav-link{"data-widget" => "pushmenu", :href => "#", :role => "button"}
+              %i.fas.fa-bars
+      / /.navbar
+      / Main Sidebar Container
+      %aside.main-sidebar.sidebar-dark-primary.elevation-4
+        / Brand Logo
+        %a.brand-link{:href => "index3.html"}
+          %span.brand-text.font-weight-light Caddy2 UI
+        / Sidebar
+        .sidebar
+          / Sidebar Menu
+          %nav.mt-2
+            %ul.nav.nav-pills.nav-sidebar.flex-column{"data-accordion" => "false", "data-widget" => "treeview", :role => "menu"}
+              /
+                Add icons to the links using the .nav-icon class
+                with font-awesome or any other icon font library
+              %li.nav-item.has-treeview.menu-open
+                %a.nav-link.active{:href => "#"}
+                  %i.nav-icon.fas.fa-tachometer-alt
+                  %p
+                    Management
+                    %i.right.fas.fa-angle-left
+                %ul.nav.nav-treeview
+                  %li.nav-item
+                    %a.nav-link{:href => "/"}
+                      %i.far.fa-circle.nav-icon
+                      %p Hosts
+                  %li.nav-item
+                    %a.nav-link.active{:href => "#"}
+                      %i.far.fa-circle.nav-icon
+                      %p Export Config
+          / /.sidebar-menu
+        / /.sidebar
+      / Content Wrapper. Contains page content
+      .content-wrapper
+        / Content Header (Page header)
+        .content-header
+          .container-fluid
+            .row.mb-2
+              .col-sm-6
+                %h1.m-0.text-dark Export your Caddy Config
+              / /.col
+              / /.col
+            / /.row
+          / /.container-fluid
+        / /.content-header
+        / Main content
+        .content
+          .container-fluid
+            .row
+              .col-lg
+                .card
+                  .card-body
+                    %div{:style => ''}
+                      %button.btn.btn-success{:id => 'download', :onclick => "downloadString(document.getElementById(\"code\").textContent, \"application/json\", \"caddy_config\")"}
+                        %span.fas.fa-plus-square{:style => 'padding-right: 5px;'}
+                        Export Config
+                    %br
+                    %div
+                      %code
+                        %pre{:style => 'height: 700px;', :id => 'code'}= locals[:json_config]
+              / /.col-md-6
+            / /.row
+          / /.container-fluid
+        / /.content
+      / /.content-wrapper
+      / Control Sidebar
+      %aside.control-sidebar.control-sidebar-dark
+        / Control sidebar content goes here
+        .p-3
+          %h5 Title
+          %p Sidebar content
+      / /.control-sidebar
+    / ./wrapper
+    / REQUIRED SCRIPTS
+    / jQuery
+    %script{:src => "plugins/jquery/jquery.min.js"}
+    %script{:src => "plugins/datatables/jquery.dataTables.js"}
+    %script{:src => "plugins/bootstrap/js/bootstrap.bundle.min.js"}
+    %script{:src => "dist/js/adminlte.min.js"}
+    :javascript
+      function downloadString(text, fileType, fileName) {
+        var blob = new Blob([text], { type: fileType });
+        var a = document.createElement('a');
+        a.download = fileName;
+        a.href = URL.createObjectURL(blob);
+        a.dataset.downloadurl = [fileType, a.download, a.href].join(':');
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function() { URL.revokeObjectURL(a.href); }, 1500);
+      }
